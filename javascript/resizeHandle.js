@@ -79,14 +79,6 @@
                     if (evt.button !== 0) return;
                 } else {
                     if (evt.changedTouches.length !== 1) return;
-
-                    const currentTime = new Date().getTime();
-                    if (R.lastTapTime && currentTime - R.lastTapTime <= DOUBLE_TAP_DELAY) {
-                        onDoubleClick(evt);
-                        return;
-                    }
-
-                    R.lastTapTime = currentTime;
                 }
 
                 evt.preventDefault();
@@ -107,7 +99,12 @@
             });
         });
 
-        resizeHandle.addEventListener('dblclick', onDoubleClick);
+        resizeHandle.addEventListener('dblclick', (evt) => {
+            evt.preventDefault();
+            evt.stopPropagation();
+
+            parent.style.gridTemplateColumns = parent.style.originalGridTemplateColumns;
+        });
 
         afterResize(parent);
     }
